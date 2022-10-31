@@ -1,3 +1,17 @@
-# Fullstack Authentication Example with Next.js and NextAuth.js
+# How to use
 
-This is the starter project for the fullstack tutorial with Next.js and Prisma. You can find the final version of this project in the [`final`](https://github.com/prisma/blogr-nextjs-prisma/tree/final) branch of this repo.
+Planet Scale DB  https://app.planetscale.com/f-strauf/tutorial-db 
+
+Start it locally `pscale connect tutorial-db initial-setup --port 3309`
+
+push database `npx prisma db push`
+
+db browser `npx prisma studio`
+
+
+
+Demo table setup spreadsheet https://docs.google.com/spreadsheets/d/1VjF-DRJ4uymUVXDi7iTAI63OWVTkl6-9HEpN1mrk3So/edit#gid=0
+
+Push schema changes to db npx prisma db push
+
+Tutorial this is based on https://vercel.com/guides/nextjs-prisma-postgres

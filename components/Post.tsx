@@ -3,6 +3,7 @@ import Router from "next/router";
 import ReactMarkdown from "react-markdown";
 
 export type PostProps = {
+  url: string;
   id: string;
   title: string;
   author: {

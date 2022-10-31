@@ -2,13 +2,13 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["referentialIntegrity"]
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
   referentialIntegrity = "prisma"
 }
 
@@ -50,17 +50,6 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  posts         Post[]
-  accounts      Account[]
-  sessions      Session[]
-}
-
 model VerificationToken {
   id         Int      @id @default(autoincrement())
   identifier String
@@ -68,4 +57,69 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model User {
+  id            String          @id @default(cuid())
+  name          String?
+  email         String?         @unique
+  emailVerified DateTime?
+  image         String?
+  posts         Post[]
+  accounts      Account[]
+  sessions      Session[]
+  Payout        Payout[]
+  Vote          Vote[]
+  ContentAuthor ContentAuthor[]
+}
+
+model RewardRound {
+  id            String   @id @default(cuid())
+  monthYear     String?  @unique
+  budget        String?
+  contentPoints String?
+  Vote          Vote[]
+  Payout        Payout[]
+}
+
+model Payout {
+  id             String      @id @default(cuid())
+  userId         String      @unique @map("user_id")
+  user           User        @relation(fields: [userId], references: [id])
+  rewardRoundId  String
+  rewardRound    RewardRound @relation(fields: [rewardRoundId], references: [id])
+  pointsReceived String?
+  cashReward     String?
+}
+
+model Content {
+  id              String          @id @default(cuid())
+  description     String?
+  url             String?
+  pointsVote      String?
+  createdAt       String?
+  createdOn       DateTime
+  contentAuthorId String?
+  // ContentAuthor ContentAuthor @relation(fields: [contentAuthorId], references: [id])
+  Vote            Vote[]
+  ContentAuthor   ContentAuthor[]
+}
+
+model Vote {
+  id            String      @id @default(cuid())
+  rewardRoundId String
+  rewardRound   RewardRound @relation(fields: [rewardRoundId], references: [id])
+  userId        String      @map("user_id")
+  user          User        @relation(fields: [userId], references: [id])
+  pointsSpent   String?
+  contentId     String
+  content       Content     @relation(fields: [contentId], references: [id])
+}
+
+model ContentAuthor {
+  id        String  @id @default(cuid())
+  userId    String  @map("user_id")
+  user      User    @relation(fields: [userId], references: [id])
+  contentId String
+  content   Content @relation(fields: [contentId], references: [id])
 }

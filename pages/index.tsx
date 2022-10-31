@@ -4,7 +4,6 @@ import Layout from "../components/Layout"
 import Post, { PostProps } from "../components/Post"
 import prisma from '../lib/prisma';
 
-
 export const getStaticProps: GetStaticProps = async () => {
   const feed = await prisma.post.findMany({
     where: { published: true },
@@ -14,22 +13,59 @@ export const getStaticProps: GetStaticProps = async () => {
       },
     },
   });
+
+  const payout = await prisma.payout.findMany({
+    include: {
+      user: {
+        select: { name: true },
+      },
+      rewardRound: {
+        select: { monthYear: true },
+      },
+    },
+  });
+
+  const rewardRound = await prisma.rewardRound.findMany({
+
+  });
+
   return {
-    props: { feed },
+    props: {
+      feed,
+      payout,
+      rewardRound,
+    },
     revalidate: 10,
   };
 };
 
 type Props = {
   feed: PostProps[]
+  payout: PostProps[]
 }
 
 const Blog: React.FC<Props> = (props) => {
   return (
     <Layout>
       <div className="page">
-        <h1>Public Feed</h1>
+
         <main>
+          <h1>Reward Round Payout</h1>
+          <p>{props.payout[0].rewardRound.monthYear}</p>
+          {props.payout.map((payout) => (
+            <div>
+              <p>{payout.user.name}</p>
+              <p>{payout.cashReward}</p>
+            </div>
+          ))}
+          <h1>Reward Rounds</h1>
+          {props.rewardRound.map((rewardRound) => (
+            <div>
+              <p>{rewardRound.monthYear}</p>
+              <p>{rewardRound.budget}</p>
+            </div>
+          ))}
+          <h1>Public Feed</h1>
           {props.feed.map((post) => (
             <div key={post.id} className="post">
               <Post post={post} />
