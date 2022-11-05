@@ -66,28 +66,7 @@ const Post: React.FC<PostProps> = (props) => {
             <button onClick={() => deletePost(props.id)}>Delete</button>
           )
         }
-      </div>
-      <style jsx>{`
-        .page {
-          background: var(--geist-background);
-          padding: 2rem;
-        }
-
-        .actions {
-          margin-top: 2rem;
-        }
-
-        button {
-          background: #ececec;
-          border: 0;
-          border-radius: 0.125rem;
-          padding: 1rem 2rem;
-        }
-
-        button + button {
-          margin-left: 1rem;
-        }
-      `}</style>
+      </div>     
     </Layout>
   );
 };

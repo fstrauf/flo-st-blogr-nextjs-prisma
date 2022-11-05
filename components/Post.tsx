@@ -3,6 +3,8 @@ import Router from "next/router";
 import ReactMarkdown from "react-markdown";
 
 export type PostProps = {
+  cashReward: ReactNode;
+  user: any;
   url: string;
   id: string;
   title: string;
@@ -21,12 +23,6 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
       <h2>{post.title}</h2>
       <small>By {authorName}</small>
       <ReactMarkdown children={post.content} />
-      <style jsx>{`
-        div {
-          color: inherit;
-          padding: 2rem;
-        }
-      `}</style>
     </div>
   );
 };

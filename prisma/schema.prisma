@@ -80,6 +80,7 @@ model RewardRound {
   contentPoints String?
   Vote          Vote[]
   Payout        Payout[]
+  isOpen        Boolean @default(false)
 }
 
 model Payout {

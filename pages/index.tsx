@@ -3,6 +3,7 @@ import { GetStaticProps } from "next"
 import Layout from "../components/Layout"
 import Post, { PostProps } from "../components/Post"
 import prisma from '../lib/prisma';
+import RewardRound from "../components/RewardRound";
 
 export const getStaticProps: GetStaticProps = async () => {
   const feed = await prisma.post.findMany({
@@ -48,21 +49,21 @@ const Blog: React.FC<Props> = (props) => {
   return (
     <Layout>
       <div className="page">
-
         <main>
-          <h1>Reward Round Payout</h1>
-          <p>{props.payout[0].rewardRound.monthYear}</p>
+          <h1 className="text-3xl font-bold underline">Reward Round Payout</h1>
           {props.payout.map((payout) => (
             <div>
               <p>{payout.user.name}</p>
               <p>{payout.cashReward}</p>
             </div>
           ))}
-          <h1>Reward Rounds</h1>
+          <h1 className="text-2xl">Reward Rounds</h1>
           {props.rewardRound.map((rewardRound) => (
-            <div>
+            <div key={rewardRound.id} className="bg-white hover:box-shadow">
+              <RewardRound rewardRound={rewardRound} />
               <p>{rewardRound.monthYear}</p>
               <p>{rewardRound.budget}</p>
+              <p>{rewardRound.isOpen}</p>
             </div>
           ))}
           <h1>Public Feed</h1>
@@ -72,21 +73,7 @@ const Blog: React.FC<Props> = (props) => {
             </div>
           ))}
         </main>
-      </div>
-      <style jsx>{`
-        .post {
-          background: white;
-          transition: box-shadow 0.1s ease-in;
-        }
-
-        .post:hover {
-          box-shadow: 1px 1px 3px #aaa;
-        }
-
-        .post + .post {
-          margin-top: 2rem;
-        }
-      `}</style>
+      </div>      
     </Layout>
   )
 }

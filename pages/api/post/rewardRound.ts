@@ -31,8 +31,6 @@ export default async function handle(req, res) {
     }
   })
 
-  console.log(String(contentCount * 10))
-
   const result = await prisma.rewardRound.create({
     data: {
       budget: budget,
