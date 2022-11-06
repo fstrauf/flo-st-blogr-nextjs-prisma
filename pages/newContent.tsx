@@ -33,7 +33,7 @@ const newContent: React.FC = (props) => {
   const submitData = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     try {
-      const body = { title, selectedUser, url , date};
+      const body = { title, selectedUser, url, date };
       await fetch('/api/post', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -48,15 +48,16 @@ const newContent: React.FC = (props) => {
 
   return (
     <Layout>
-      <div>
+      <div className='max-w-5xl mt-2 flex mb-10 m-auto'>
         <form onSubmit={submitData}>
-          <h1>Content</h1>
+          <h1 className="text-3xl font-bold">Create New Content</h1>
           <input
             autoFocus
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Description"
             type="text"
             value={title}
+            className="relative m-2 w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"
           />
           <input
             autoFocus
@@ -64,6 +65,7 @@ const newContent: React.FC = (props) => {
             placeholder="dd-mm-yyyy"
             type="date"
             value={date}
+            className="relative m-2 w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"
           />
           <input
             autoFocus
@@ -71,57 +73,37 @@ const newContent: React.FC = (props) => {
             placeholder="url"
             type="text"
             value={url}
+            className="relative m-2 w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"
           />
-            {/* <DatePicker 
+          {/* <DatePicker 
             selected={date} 
             onChange={(date) => setDate(date)} /> */}
           <Listbox value={selectedUser} onChange={setSelectedUser}>
-            <Listbox.Button>{selectedUser.name}</Listbox.Button>
-            <Listbox.Options>
-              {props.users.map((user) => (
-                <Listbox.Option
-                  key={user.id}
-                  value={user}
-                >
-                  {user.name}
-                </Listbox.Option>
-              ))}
-            </Listbox.Options>
+            <div className="relative mt-1">
+              <Listbox.Button className="relative w-full m-2 cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">{selectedUser.name}</Listbox.Button>
+              <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                {props.users.map((user) => (
+                  <Listbox.Option
+                    className={({ active }) =>
+                      `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-amber-100 text-amber-900' : 'text-gray-900'
+                      }`
+                    }
+                    key={user.id}
+                    value={user}
+                  >
+                    {user.name}
+                  </Listbox.Option>
+                ))}
+              </Listbox.Options>
+            </div>
           </Listbox>
-          <input disabled={!selectedUser || !title || !date} type="submit" value="Create" />
-          <a className="back" href="#" onClick={() => Router.push('/')}>
+          <input className='bg-gray-200 border-solid border-2 border-sky-500 rounded m-4' disabled={!selectedUser || !title || !date} type="submit" value="Create" />
+          <a className="bg-gray-200 border-solid border-2 border-sky-500 rounded m-4" href="#" onClick={() => Router.push('/')}>
             or Cancel
           </a>
         </form>
       </div>
-      <style jsx>{`
-        .page {
-          background: var(--geist-background);
-          padding: 3rem;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
 
-        input[type='text'],
-        textarea {
-          width: 100%;
-          padding: 0.5rem;
-          margin: 0.5rem 0;
-          border-radius: 0.25rem;
-          border: 0.125rem solid rgba(0, 0, 0, 0.2);
-        }
-
-        input[type='submit'] {
-          background: #ececec;
-          border: 0;
-          padding: 1rem 2rem;
-        }
-
-        .back {
-          margin-left: 1rem;
-        }
-      `}</style>
     </Layout>
   );
 };

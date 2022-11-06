@@ -74,12 +74,14 @@ model User {
 }
 
 model RewardRound {
-  id            String   @id @default(cuid())
-  monthYear     String?  @unique
+  id            String    @id @default(cuid())
+  monthYear     String?   @unique
   budget        String?
-  contentPoints String?
+  contentPoints Int?
   Vote          Vote[]
   Payout        Payout[]
+  isOpen        Boolean   @default(false)
+  Content       Content[]
 }
 
 model Payout {
@@ -88,7 +90,7 @@ model Payout {
   user           User        @relation(fields: [userId], references: [id])
   rewardRoundId  String
   rewardRound    RewardRound @relation(fields: [rewardRoundId], references: [id])
-  pointsReceived String?
+  pointsReceived Int?
   cashReward     String?
 }
 
@@ -96,13 +98,15 @@ model Content {
   id              String          @id @default(cuid())
   description     String?
   url             String?
-  pointsVote      String?
+  pointsVote      Int?
   createdAt       String?
   createdOn       DateTime
   contentAuthorId String?
   // ContentAuthor ContentAuthor @relation(fields: [contentAuthorId], references: [id])
   Vote            Vote[]
   ContentAuthor   ContentAuthor[]
+  rewardRoundId   String?         @default(cuid())
+  rewardRound     RewardRound?    @relation(fields: [rewardRoundId], references: [id])
 }
 
 model Vote {
@@ -111,7 +115,7 @@ model Vote {
   rewardRound   RewardRound @relation(fields: [rewardRoundId], references: [id])
   userId        String      @map("user_id")
   user          User        @relation(fields: [userId], references: [id])
-  pointsSpent   String?
+  pointsSpent   Int?
   contentId     String
   content       Content     @relation(fields: [contentId], references: [id])
 }

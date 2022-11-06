@@ -34,7 +34,7 @@ const Content: React.FC<Props> = (props) => {
   if (!session) {
     return (
       <Layout>
-        <h1>Content</h1>
+        <h1 className="text-3xl font-bold underline">Content</h1>
         <div>You need to be authenticated to view this page.</div>
       </Layout>
     );
@@ -54,21 +54,7 @@ const Content: React.FC<Props> = (props) => {
             </div>
           ))}
         </main>
-      </div>
-      <style jsx>{`
-        .post {
-          background: var(--geist-background);
-          transition: box-shadow 0.1s ease-in;
-        }
-
-        .post:hover {
-          box-shadow: 1px 1px 3px #aaa;
-        }
-
-        .post + .post {
-          margin-top: 2rem;
-        }
-      `}</style>
+      </div>      
     </Layout>
   );
 };

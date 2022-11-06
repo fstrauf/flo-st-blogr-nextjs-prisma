@@ -4,7 +4,7 @@ import React from 'react';
 import { GetServerSideProps } from 'next';
 import { useSession, getSession } from 'next-auth/react';
 import Layout from '../components/Layout';
-import Post, { PostProps } from '../components/Post';
+import RewardRound, { RewardRoundProps } from '../components/RewardRound';
 import prisma from '../lib/prisma';
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
@@ -26,12 +26,12 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     },
   });
   return {
-    props: { drafts },
+    props: { rewardRounds },
   };
 };
 
 type Props = {
-  drafts: PostProps[];
+  rewardRounds: RewardRoundProps[];
 };
 
 const Drafts: React.FC<Props> = (props) => {
@@ -51,27 +51,13 @@ const Drafts: React.FC<Props> = (props) => {
       <div className="page">
         <h1>My Drafts</h1>
         <main>
-          {props.drafts.map((post) => (
+          {props.rewardRounds.map((post) => (
             <div key={post.id} className="post">
-              <Post post={post} />
+              <RewardRound post={post} />
             </div>
           ))}
         </main>
       </div>
-      <style jsx>{`
-        .post {
-          background: var(--geist-background);
-          transition: box-shadow 0.1s ease-in;
-        }
-
-        .post:hover {
-          box-shadow: 1px 1px 3px #aaa;
-        }
-
-        .post + .post {
-          margin-top: 2rem;
-        }
-      `}</style>
     </Layout>
   );
 };

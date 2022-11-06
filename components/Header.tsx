@@ -12,31 +12,11 @@ const Header: React.FC = () => {
   const { data: session, status } = useSession();
 
   let left = (
-    <div className="left">
-      <Link href="/" className="bold" data-active={isActive('/')}>
-        {/* <a className="bold" data-active={isActive('/')}> */}
+    <div className="bg-gray-200 border-solid border-2 border-sky-500 rounded">
+      <Link href="/"  data-active={isActive('/')}>
           Feed
-        {/* </a> */}
       </Link>
-      <style jsx>{`
-        .bold {
-          font-weight: bold;
-        }
-
-        a {
-          text-decoration: none;
-          color: var(--geist-foreground);
-          display: inline-block;
-        }
-
-        .left a[data-active='true'] {
-          color: gray;
-        }
-
-        a + a {
-          margin-left: 1rem;
-        }
-      `}</style>
+     
     </div>
   );
 
@@ -44,173 +24,75 @@ const Header: React.FC = () => {
 
   if (status === 'loading') {
     left = (
-      <div className="left">
+      <div className="bg-gray-200 border-solid border-2 border-sky-500 rounded">
         <Link href="/" className="bold" data-active={isActive('/')}>
-          {/* <a className="bold" data-active={isActive('/')}> */}
             Feed
-          {/* </a> */}
         </Link>
-        <style jsx>{`
-          .bold {
-            font-weight: bold;
-          }
-
-          a {
-            text-decoration: none;
-            color: var(--geist-foreground);
-            display: inline-block;
-          }
-
-          .left a[data-active='true'] {
-            color: gray;
-          }
-
-          a + a {
-            margin-left: 1rem;
-          }
-        `}</style>
+        
       </div>
     );
     right = (
       <div className="right">
         <p>Validating session ...</p>
-        <style jsx>{`
-          .right {
-            margin-left: auto;
-          }
-        `}</style>
+       
       </div>
     );
   }
 
   if (!session) {
     right = (
-      <div className="right">
+      <div className="bg-gray-200 border-solid border-2 border-sky-500 rounded">
         <Link href="/api/auth/signin" data-active={isActive('/signup')}>
           Log in
         </Link>
-        <style jsx>{`
-          a {
-            text-decoration: none;
-            color: var(--geist-foreground);
-            display: inline-block;
-          }
-
-          a + a {
-            margin-left: 1rem;
-          }
-
-          .right {
-            margin-left: auto;
-          }
-
-          .right a {
-            border: 1px solid var(--geist-foreground);
-            padding: 0.5rem 1rem;
-            border-radius: 3px;
-          }
-        `}</style>
+       
       </div>
     );
   }
 
   if (session) {
     left = (
-      <div className="left">
-        <Link href="/" className="bold" data-active={isActive('/')}>
+      <div className='flex '>
+        <Link href="/" className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" data-active={isActive('/')}>
             Feed
         </Link>
-        <Link href="/drafts" data-active={isActive('/drafts')}>
+        <Link href="/drafts" className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" data-active={isActive('/drafts')}>
           My drafts
         </Link>
-        <Link href="/content" data-active={isActive('/content')}>
+        <Link href="/content" className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" data-active={isActive('/content')}>
           Content
         </Link>
-        <style jsx>{`
-          .bold {
-            font-weight: bold;
-          }
-
-          a {
-            text-decoration: none;
-            color: var(--geist-foreground);
-            display: inline-block;
-          }
-
-          .left a[data-active='true'] {
-            color: gray;
-          }
-
-          a + a {
-            margin-left: 1rem;
-          }
-        `}</style>
+     
       </div>
     );
     right = (
-      <div className="right">
-        <p>
+      <div className="flex">
+        <p className='m-2'>
           {session.user.name} ({session.user.email})
         </p>
-        <Link href="/newContent">
+        <Link className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" href="/newContent">
           <button>
             New content
           </button>
         </Link>
-        <Link href="/newRewardRound">
+        <Link className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" href="/newRewardRound">
           <button>
             New Reward Round
           </button>
         </Link>
-        <button onClick={() => signOut()}>
+        <button className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" onClick={() => signOut()}>
           <a>Log out</a>
         </button>
-        <style jsx>{`
-          a {
-            text-decoration: none;
-            color: var(--geist-foreground);
-            display: inline-block;
-          }
-
-          p {
-            display: inline-block;
-            font-size: 13px;
-            padding-right: 1rem;
-          }
-
-          a + a {
-            margin-left: 1rem;
-          }
-
-          .right {
-            margin-left: auto;
-          }
-
-          .right a {
-            border: 1px solid var(--geist-foreground);
-            padding: 0.5rem 1rem;
-            border-radius: 3px;
-          }
-
-          button {
-            border: none;
-          }
-        `}</style>
+       
       </div>
     );
   }
 
   return (
-    <nav>
+    <nav className="mt-16 mb-16 flex flex-col items-center md:mb-12 md:flex-row md:justify-between">
       {left}
       {right}
-      <style jsx>{`
-        nav {
-          display: flex;
-          padding: 2rem;
-          align-items: center;
-        }
-      `}</style>
+  
     </nav>
   );
 };
