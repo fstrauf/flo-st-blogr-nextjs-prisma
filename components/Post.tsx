@@ -3,7 +3,7 @@ import Router from "next/router";
 import ReactMarkdown from "react-markdown";
 
 export type PostProps = {
-  cashReward: ReactNode;
+  cashReward: any;
   user: any;
   url: string;
   id: string;
@@ -14,6 +14,9 @@ export type PostProps = {
   } | null;
   content: string;
   published: boolean;
+  description: string;
+  pointsVote: Number;
+  createdOn: any;
 };
 
 const Post: React.FC<{ post: PostProps }> = ({ post }) => {

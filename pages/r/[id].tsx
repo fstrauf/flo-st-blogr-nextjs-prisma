@@ -63,7 +63,13 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   };
 };
 
-const RewardRound: React.FC = (props) => {
+type Props = {
+  user: any;
+  rewardRound: any;
+  
+}
+
+const RewardRound: React.FC<Props> = (props) => {
   const { data: session, status } = useSession();
   const util = require('util');
 

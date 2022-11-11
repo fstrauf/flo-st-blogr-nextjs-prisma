@@ -44,7 +44,8 @@ export const getServerSideProps: GetServerSideProps = async () => {
 };
 
 type Props = {
-  payout: PostProps[]
+  payout: PostProps[];
+  rewardRound: any;
 }
 
 const Blog: React.FC<Props> = (props) => {

@@ -59,10 +59,10 @@ const newRewardRound: React.FC = (props) => {
           />
           <input
             autoFocus
-            onChange={(e) => setPeriod(e.target.value)}
+            onChange={(e) => setPeriod(new Date(e.target.value))}
             placeholder="Selection Period"
             type="month"
-            value={period}
+            // value={period}
           />
           {/* <input
             autoFocus

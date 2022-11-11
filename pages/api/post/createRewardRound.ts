@@ -1,38 +1,30 @@
 import prisma from '../../../lib/prisma';
-// import moment from 'moment';
-
-//Todo: create reward round early on without content.
-// update the content points with every piece of content that is added to the round.
+import { Prisma } from '@prisma/client'
 
 export default async function handle(req, res) {
-  const { budget, period } = req.body;  
-  // const first = new Date(period)
-  // const last = moment(first).endOf('month').toDate()
+  const { budget, period } = req.body;
 
-  // const contentCount = await prisma.content.count({
-  //   where: { 
-  //     AND: [
-  //       {
-  //         createdOn: {
-  //           lte: last
-  //         },
-  //       },
-  //       { 
-  //         createdOn: {
-  //           gte: first
-  //         },
-  //       },
-  //     ],
-  //   }
-  // })
+  console.log(req)
 
-  const result = await prisma.rewardRound.create({
-    data: {
-      budget: Number(budget),
-      monthYear: period,
-      // contentPoints: Number(contentCount * 10), 
+  try {
+    const result = await prisma.rewardRound.create({
+      data: {
+        budget: Number(budget),
+        monthYear: new Date(period).toISOString().slice(0, 7),
+      }
+
+    });
+    res.json(result);
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      // The .code property can be accessed in a type-safe manner
+      if (e.code === 'P2002') {
+        console.log(
+          'A reward round for this month already exists!'
+        )
+      }
     }
+    throw e
+  }
 
-  });
-  res.json(result);
 }

@@ -26,7 +26,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     },
   });
   return {
-    props: { rewardRounds },
+    props: { drafts },
   };
 };
 
@@ -53,7 +53,7 @@ const Drafts: React.FC<Props> = (props) => {
         <main>
           {props.rewardRounds.map((post) => (
             <div key={post.id} className="post">
-              <RewardRound post={post} />
+              {/* <RewardRound post={post} /> */}
             </div>
           ))}
         </main>

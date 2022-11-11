@@ -34,9 +34,15 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   };
 };
 
-const newContent: React.FC = (props) => {
+type Props = {
+  users: any;
+  rewardRound: any;
+  
+}
 
-console.log(props)
+const newContent: React.FC<Props> = (props) => {
+
+// console.log(props)
 
   const [title, setTitle] = useState('');
   const [selectedUser, setSelectedUser] = useState(props.users[0]);

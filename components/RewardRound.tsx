@@ -15,6 +15,9 @@ export type RewardRoundProps = {
   published: boolean;
   isOpen: boolean;
   contentPoints: Number;
+  monthYear: any;
+  Content: any;
+  Payout: any;
 };
 
 
