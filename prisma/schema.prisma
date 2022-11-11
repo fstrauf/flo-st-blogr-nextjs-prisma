@@ -76,7 +76,7 @@ model User {
 model RewardRound {
   id            String    @id @default(cuid())
   monthYear     String?   @unique
-  budget        String?
+  budget        Int?
   contentPoints Int?
   Vote          Vote[]
   Payout        Payout[]
@@ -86,12 +86,12 @@ model RewardRound {
 
 model Payout {
   id             String      @id @default(cuid())
-  userId         String      @unique @map("user_id")
+  userId         String      @map("user_id")
   user           User        @relation(fields: [userId], references: [id])
   rewardRoundId  String
   rewardRound    RewardRound @relation(fields: [rewardRoundId], references: [id])
   pointsReceived Int?
-  cashReward     String?
+  cashReward     Float?
 }
 
 model Content {
@@ -100,7 +100,7 @@ model Content {
   url             String?
   pointsVote      Int?
   createdAt       String?
-  createdOn       DateTime
+  createdOn       DateTime?
   contentAuthorId String?
   // ContentAuthor ContentAuthor @relation(fields: [contentAuthorId], references: [id])
   Vote            Vote[]

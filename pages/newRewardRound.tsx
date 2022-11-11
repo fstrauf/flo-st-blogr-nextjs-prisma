@@ -33,7 +33,7 @@ const newRewardRound: React.FC = (props) => {
     e.preventDefault();
     try {
       const body = { budget, period };
-      await fetch('/api/post/rewardRound', {
+      await fetch('/api/post/createRewardRound', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),

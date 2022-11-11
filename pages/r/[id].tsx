@@ -1,15 +1,9 @@
-// pages/r/[id].tsx
-
 import React, { use, useState } from 'react';
 import { GetServerSideProps } from 'next';
-// import ReactMarkdown from 'react-markdown';
 import Router from 'next/router';
 import Layout from '../../components/Layout';
-// import { RewardRoundProps } from '../../components/RewardRound';
 import { useSession } from 'next-auth/react';
 import prisma from '../../lib/prisma';
-import moment from 'moment';
-// import { isUndefined } from 'util';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
@@ -25,105 +19,57 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       id: String(query?.id),
     },
     include: {
-      Vote: {
-        // select: { 
-        //   pointsSpent: true,
-        //   id: true,
-        // },
-        where: {
-          userId: {
-            equals: user.id
-          }
-        },
-      },
       Content: {
+        include: {
+          Vote: {
+            where: {
+              userId: {
+                equals: user.id
+              }
+            },
+          }
+        }
 
       }
     },
   });
 
-  // const first = new Date(rewardRound.monthYear)
-  // const last = moment(first).endOf('month').toDate()
-
-  // const content = await prisma.content.findMany({
+  // const rewardRound = await prisma.rewardRound.findUnique({
   //   where: {
-  //     AND: [
-  //       {
-  //         createdOn: {
-  //           lte: last
-  //         },
-  //       },
-  //       {
-  //         createdOn: {
-  //           gte: first
-  //         },
-  //       },
-  //     ],
+  //     id: String(query?.id),
   //   },
   //   include: {
   //     Vote: {
   //       where: {
-  //         AND: [
-  //           {
-  //             userId: {
-  //               equals: user.id
-  //             }
-  //           },
-  //           {
-  //             rewardRoundId: {
-  //               equals: String(query?.id)
-  //             }
-  //           }
-  //         ]
+  //         userId: {
+  //           equals: user.id
+  //         }
+  //       },
+  //       include: {
+  //         content: {}
   //       }
+  //     },
+  //     Content: {
+
   //     }
-  //   }
+  //   },
   // });
 
   return {
     props: {
-      // content,
       rewardRound,
       user,
     },
   };
 };
 
-
-
-// async function publishPost(id: string): Promise<void> {
-//   await fetch(`/api/publish/${id}`, {
-//     method: 'PUT',
-//   });
-//   await Router.push('/');
-// }
-
-// async function deletePost(id: string): Promise<void> {
-//   await fetch(`/api/post/${id}`, {
-//     method: 'DELETE',
-//   });
-//   Router.push('/');
-// }
-
-
 const RewardRound: React.FC = (props) => {
-  // const RewardRound: React.FC<RewardRoundProps> = (props) => {
   const { data: session, status } = useSession();
   const util = require('util');
 
-
-
-  // console.log(session)
   if (status === 'loading') {
     return <div>Authenticating ...</div>;
   }
-
-  // const user = await prisma.user.findUnique({
-  //   where: {
-  //     email: String(session?.user?.email),
-  //   },
-  // },
-  // );
 
   // const userHasValidSession = Boolean(session);
   // const postBelongsToUser = session?.user?.email === props.author?.email;
@@ -149,22 +95,30 @@ const RewardRound: React.FC = (props) => {
   };
 
   // console.log(props.rewardRound)
-  // console.log(props.content)
+
+  // const votePrep = props.rewardRound?.Vote?.map(vote => {
+  //   return {
+  //     ...vote,
+  //     description: vote.content.description,
+  //   };
+  // }
+  // );
+
+  // console.log(votePrep2)
 
 
-  // voteFields.map((input, index) => (
-  const votePrep = props.rewardRound?.Content?.map((content,index) => {
+    const votePrep = props.rewardRound?.Content?.map(content => {
     return {
       ...content,
       // rewardRoundID: props.rewardRound.id,
       userId: props.user.id,
-      pointsSpent: util.isUndefined(props.rewardRound.Vote[index]) ? 0 : Number(props.rewardRound.Vote[index]?.pointsSpent),
-      voteId: props.rewardRound.Vote[index]?.id
+      pointsSpent: util.isUndefined(content.Vote[0]?.pointsSpent) ? 0 : Number(content.Vote[0]?.pointsSpent),
+      // voteId: props.rewardRound.Vote[index]?.id
     };
   }
   );
 
-  // console.log(votePrep)
+  console.log(votePrep)
 
   const [voteFields, setvoteFields] = useState(votePrep)
   const [totalVoted, setTotalVoted] = useState(votePrep.reduce((a, v) => a = a + Number(v.pointsSpent), 0))
@@ -183,6 +137,8 @@ const RewardRound: React.FC = (props) => {
       setTotalReached(false)
     }
   }
+
+  console.log(voteFields)
 
   return (
     <Layout>
