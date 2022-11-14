@@ -71,6 +71,7 @@ model User {
   Payout        Payout[]
   Vote          Vote[]
   ContentAuthor ContentAuthor[]
+  wallet        String?         @unique
 }
 
 model RewardRound {

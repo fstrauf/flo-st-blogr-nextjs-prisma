@@ -14,13 +14,16 @@
     "@prisma/client": "^4.5.0",
     "babel-plugin-superjson-next": "^0.4.4",
     "eslint": "^8.27.0",
+    "ethers": "^5.7.2",
+    "moralis": "^2.7.2",
     "next": "13.0.2",
     "next-auth": "^4.16.4",
     "next-superjson-plugin": "^0.4.8",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-markdown": "^8.0.3",
-    "superjson": "^1.11.0"
+    "superjson": "^1.11.0",
+    "wagmi": "^0.8.3"
   },
   "devDependencies": {
     "@types/node": "17.0.14",

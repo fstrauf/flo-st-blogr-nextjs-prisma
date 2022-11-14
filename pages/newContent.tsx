@@ -2,11 +2,15 @@
 
 import React, { useState } from 'react';
 import Layout from '../components/Layout';
-import Router from 'next/router';
+// import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
-import { getSession } from 'next-auth/react';
+import { getSession, signOut } from 'next-auth/react';
 import prisma from '../lib/prisma';
 import { Listbox } from '@headlessui/react'
+import { useSession, signIn } from 'next-auth/react';
+import { InjectedConnector } from 'wagmi/connectors/injected';
+import { useAccount, useConnect, useSignMessage, useDisconnect } from 'wagmi';
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const session = await getSession({ req });
@@ -37,19 +41,57 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 type Props = {
   users: any;
   rewardRound: any;
-  
+
 }
 
 const newContent: React.FC<Props> = (props) => {
 
-// console.log(props)
-
+  // console.log(props)
+  const { data: session, status } = useSession();
   const [title, setTitle] = useState('');
   const [selectedUser, setSelectedUser] = useState(props.users[0]);
-  const [selectedRewardRound, setSelectedRewardRound] = useState(props.rewardRound[0]);
+  const [user, setUser] = useState("");
+  const [selectedRewardRound, setSelectedRewardRound] = useState(!(props?.rewardRound[0]));
   const [url, setUrl] = useState('');
-  // const [date, setDate] = useState(new Date());
 
+  if (!session) {
+    return (
+      <Layout>
+        <div>Please log in</div>
+      </Layout>
+    )
+  }
+
+
+  
+  // const [date, setDate] = useState(new Date());
+  // const { connectAsync } = useConnect();
+  // const { disconnectAsync } = useDisconnect();
+  // const { isConnected } = useAccount();
+  // const { signMessageAsync } = useSignMessage();
+  // const { push } = useRouter();
+  // const { push } = useRouter();
+
+  const setUserName = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+
+    console.log(user)
+    try {
+      const body = { user, session };
+      await fetch('/api/post/setUserName', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      })
+      // await Router.push('/');
+      console.log('successful');
+      const { url } = await signOut({callbackUrl: '/'})
+      await Router.push(url);
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   const submitData = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -69,6 +111,22 @@ const newContent: React.FC<Props> = (props) => {
 
   return (
     <Layout>
+      {!session?.user?.name && (
+        <div className='max-w-5xl mt-2 flex mb-10 m-auto'>
+          <h1>First Time? Set Username!</h1>
+          <form onSubmit={setUserName}>
+            <input
+              autoFocus
+              onChange={(e) => setUser(e.target.value)}
+              placeholder="Name"
+              type="text"
+              value={user}
+              className="relative m-2 w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"
+            />
+          </form>
+          <button className='bg-gray-200 border-solid border-2 border-sky-500 rounded m-4' onClick={setUserName}>Save</button>
+        </div>
+      )}
       <div className='max-w-5xl mt-2 flex mb-10 m-auto'>
         <form onSubmit={submitData}>
           <h1 className="text-3xl font-bold">Create New Content</h1>

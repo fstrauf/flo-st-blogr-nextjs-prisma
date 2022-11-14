@@ -2,21 +2,67 @@
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { signOut, useSession } from 'next-auth/react';
+import { signIn, signOut, useSession } from 'next-auth/react';
+import { InjectedConnector } from 'wagmi/connectors/injected';
+import { useAccount, useConnect, useSignMessage, useDisconnect } from 'wagmi';
+// import axios from 'axios';
+// import { EvmChain } from '@moralisweb3/evm-utils';
 
-const Header: React.FC = () => {
+export default function Header() {
   const router = useRouter();
   const isActive: (pathname: string) => boolean = (pathname) =>
     router.pathname === pathname;
 
   const { data: session, status } = useSession();
 
+  const { connectAsync } = useConnect();
+  const { disconnectAsync } = useDisconnect();
+  const { isConnected } = useAccount();
+  const { signMessageAsync } = useSignMessage();
+  const { push } = useRouter();
+
+  const submitData = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+
+    if (isConnected) {
+      await disconnectAsync();
+    }
+
+    const { account, chain } = await connectAsync({ connector: new InjectedConnector() });
+    const userData = { address: account, chain: chain.id, network: 'evm' };
+
+    try {
+      // const body = { title, selectedUser, url, selectedRewardRound };
+      const response = await fetch('/api/auth/request-message', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData),
+      });
+
+      const data = await response.json();
+      // console.log('Data')
+      // console.log(data)
+
+      // const message = data
+      const message = data.message;
+      const signature = await signMessageAsync({ message });
+      const { url } = await signIn('credentials', { message, signature, redirect: false, callbackUrl: '/' });
+
+      push(url);
+
+      // await Router.push('/');
+      console.log('successful');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   let left = (
     <div className="bg-gray-200 border-solid border-2 border-sky-500 rounded">
-      <Link href="/"  data-active={isActive('/')}>
-          Feed
+      <Link href="/" data-active={isActive('/')}>
+        Feed
       </Link>
-     
+
     </div>
   );
 
@@ -26,15 +72,15 @@ const Header: React.FC = () => {
     left = (
       <div className="bg-gray-200 border-solid border-2 border-sky-500 rounded">
         <Link href="/" className="bold" data-active={isActive('/')}>
-            Feed
+          Feed
         </Link>
-        
+
       </div>
     );
     right = (
       <div className="right">
         <p>Validating session ...</p>
-       
+
       </div>
     );
   }
@@ -42,10 +88,7 @@ const Header: React.FC = () => {
   if (!session) {
     right = (
       <div className="bg-gray-200 border-solid border-2 border-sky-500 rounded">
-        <Link href="/api/auth/signin" data-active={isActive('/signup')}>
-          Log in
-        </Link>
-       
+        <button onClick={submitData}>Authenticate via Metamask</button>
       </div>
     );
   }
@@ -54,7 +97,7 @@ const Header: React.FC = () => {
     left = (
       <div className='flex '>
         <Link href="/" className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" data-active={isActive('/')}>
-            Home
+          Home
         </Link>
         {/* <Link href="/drafts" className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" data-active={isActive('/drafts')}>
           My drafts
@@ -62,7 +105,7 @@ const Header: React.FC = () => {
         <Link href="/content" className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" data-active={isActive('/content')}>
           Content
         </Link> */}
-     
+
       </div>
     );
     right = (
@@ -80,10 +123,10 @@ const Header: React.FC = () => {
             New Reward Round
           </button>
         </Link>
-        <button className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" onClick={() => signOut()}>
+        <button className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" onClick={() => signOut({callbackUrl: '/'})}>
           <a>Log out</a>
         </button>
-       
+
       </div>
     );
   }
@@ -92,9 +135,7 @@ const Header: React.FC = () => {
     <nav className="mt-16 mb-16 flex flex-col items-center md:mb-12 md:flex-row md:justify-between">
       {left}
       {right}
-  
+
     </nav>
   );
 };
-
-export default Header;
