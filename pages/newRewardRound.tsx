@@ -23,7 +23,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   };
 };
 
-const newRewardRound: React.FC = (props) => {
+const NewRewardRound: React.FC = (props) => {
   const [budget, setBudget] = useState('');
   const [period, setPeriod] = useState(new Date());  
   // const [contentPoints, setContentPoints] = useState('');  x

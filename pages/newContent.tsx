@@ -44,7 +44,7 @@ type Props = {
 
 }
 
-const newContent: React.FC<Props> = (props) => {
+const NewContent: React.FC<Props> = (props) => {
 
   // console.log(props)
   const { data: session, status } = useSession();

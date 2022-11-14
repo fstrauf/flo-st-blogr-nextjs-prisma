@@ -46,7 +46,7 @@ const Content: React.FC<Props> = (props) => {
         <h1>Content</h1>
         <main>
           {props.content.map((content) => (
-            <div className="post">
+            <div key={content.id} className="post">
               <p>{content.description}</p>
               <p>{content.url}</p>
               <p>{content.pointsVote}</p>

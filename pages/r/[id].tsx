@@ -66,16 +66,16 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 type Props = {
   user: any;
   rewardRound: any;
-  
+
 }
 
 const RewardRound: React.FC<Props> = (props) => {
   const { data: session, status } = useSession();
   const util = require('util');
 
-  if (status === 'loading') {
-    return <div>Authenticating ...</div>;
-  }
+  // if (status === 'loading') {
+  //   return <div>Authenticating ...</div>;
+  // }
 
   // const userHasValidSession = Boolean(session);
   // const postBelongsToUser = session?.user?.email === props.author?.email;
@@ -113,7 +113,7 @@ const RewardRound: React.FC<Props> = (props) => {
   // console.log(votePrep2)
 
 
-    const votePrep = props.rewardRound?.Content?.map(content => {
+  const votePrep = props.rewardRound?.Content?.map(content => {
     return {
       ...content,
       // rewardRoundID: props.rewardRound.id,
@@ -121,8 +121,7 @@ const RewardRound: React.FC<Props> = (props) => {
       pointsSpent: util.isUndefined(content.Vote[0]?.pointsSpent) ? 0 : Number(content.Vote[0]?.pointsSpent),
       // voteId: props.rewardRound.Vote[index]?.id
     };
-  }
-  );
+  });
 
   console.log(votePrep)
 

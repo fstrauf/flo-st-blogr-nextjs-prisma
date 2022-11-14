@@ -77,7 +77,9 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
               <p>{content.pointsVote}</p>
               <div>
                 {content.ContentAuthor.map((author) => (
-                  <p>{author.user.name}</p>
+                  <div key={author.id}>
+                    <p>{author.user.name}</p>
+                  </div>
                 ))}
               </div>
             </>
@@ -85,10 +87,10 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
         </div>
         <div className="grid grid-cols-2">
           {rewardRound.Payout?.map((payout) => (
-            <>
+            <div key={payout.id}>
               <p>{payout.user.name}</p>
               <p>{payout.cashReward}</p>
-            </>
+            </div>
           ))}
         </div>
       </div>
