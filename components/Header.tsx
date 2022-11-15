@@ -46,9 +46,10 @@ export default function Header() {
       // const message = data
       const message = data.message;
       const signature = await signMessageAsync({ message });
-      const { url } = await signIn('credentials', { message, signature, redirect: false, callbackUrl: '/' });
+      // const { url } = await signIn('credentials', { message, signature, redirect: false, callbackUrl: '/' });
+      await signIn('credentials', { message, signature, redirect: false, callbackUrl: '/' });
 
-      push(url);
+      // push(url);
 
       // await Router.push('/');
       console.log('successful');
@@ -111,7 +112,7 @@ export default function Header() {
     right = (
       <div className="flex">
         <p className='m-2'>
-          {session.user.name} ({session.user.email})
+          {session?.user?.name} ({session?.user?.email})
         </p>
         <Link className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" href="/newContent">
           <button>

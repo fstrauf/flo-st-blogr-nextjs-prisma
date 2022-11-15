@@ -71,12 +71,12 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
           <p className="font-bold">Content piece</p>
           <p className="font-bold">Points Voted</p>
           <p className="font-bold">Authors</p>
-          {rewardRound.Content?.map((content) => (
+          {rewardRound.Content?.map((content: any) => (
             <>
               <p>{content.description}</p>
               <p>{content.pointsVote}</p>
               <div>
-                {content.ContentAuthor.map((author) => (
+                {content.ContentAuthor.map((author: any) => (
                   <div key={author.id}>
                     <p>{author.user.name}</p>
                   </div>
@@ -86,7 +86,7 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
           ))}
         </div>
         <div className="grid grid-cols-2">
-          {rewardRound.Payout?.map((payout) => (
+          {rewardRound.Payout?.map((payout: any) => (
             <div key={payout.id}>
               <p>{payout.user.name}</p>
               <p>{payout.cashReward}</p>
@@ -102,7 +102,7 @@ const RewardRound: React.FC<{ rewardRound: RewardRoundProps }> = ({ rewardRound 
                 pathname: "/r/[id]",
                 query: {
                   id: rewardRound.id,
-                  session: session.user.email,
+                  session: session?.user?.email,
                 },
               })
             }}>Vote</button>
