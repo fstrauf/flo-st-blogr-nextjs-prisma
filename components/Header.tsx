@@ -3,8 +3,11 @@ import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { signOut, useSession } from 'next-auth/react';
+import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
 
 const Header: React.FC = () => {
+  // const { address, connectWallet } = useWeb3();
+  const address = useAddress();
   const router = useRouter();
   const isActive: (pathname: string) => boolean = (pathname) =>
     router.pathname === pathname;
@@ -13,10 +16,10 @@ const Header: React.FC = () => {
 
   let left = (
     <div className="bg-gray-200 border-solid border-2 border-sky-500 rounded">
-      <Link href="/"  data-active={isActive('/')}>
-          Feed
+      <Link href="/" data-active={isActive('/')}>
+        Feed
       </Link>
-     
+
     </div>
   );
 
@@ -26,15 +29,15 @@ const Header: React.FC = () => {
     left = (
       <div className="bg-gray-200 border-solid border-2 border-sky-500 rounded">
         <Link href="/" className="bold" data-active={isActive('/')}>
-            Feed
+          Feed
         </Link>
-        
+
       </div>
     );
     right = (
       <div className="right">
         <p>Validating session ...</p>
-       
+
       </div>
     );
   }
@@ -42,10 +45,11 @@ const Header: React.FC = () => {
   if (!session) {
     right = (
       <div className="bg-gray-200 border-solid border-2 border-sky-500 rounded">
-        <Link href="/api/auth/signin" data-active={isActive('/signup')}>
+        {/* <Link href="/api/auth/signin" data-active={isActive('/signup')}>
           Log in
-        </Link>
-       
+        </Link> */}
+        {/* <button onClick={() => connectWallet("injected")}>Connect Wallet</button> */}
+        <ConnectWallet />
       </div>
     );
   }
@@ -54,7 +58,7 @@ const Header: React.FC = () => {
     left = (
       <div className='flex '>
         <Link href="/" className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" data-active={isActive('/')}>
-            Home
+          Home
         </Link>
         {/* <Link href="/drafts" className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" data-active={isActive('/drafts')}>
           My drafts
@@ -62,7 +66,7 @@ const Header: React.FC = () => {
         <Link href="/content" className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" data-active={isActive('/content')}>
           Content
         </Link> */}
-     
+
       </div>
     );
     right = (
@@ -83,7 +87,7 @@ const Header: React.FC = () => {
         <button className="m-2 bg-gray-200 border-solid border-2 border-sky-500 rounded" onClick={() => signOut()}>
           <a>Log out</a>
         </button>
-       
+
       </div>
     );
   }
@@ -92,7 +96,7 @@ const Header: React.FC = () => {
     <nav className="mt-16 mb-16 flex flex-col items-center md:mb-12 md:flex-row md:justify-between">
       {left}
       {right}
-  
+
     </nav>
   );
 };
